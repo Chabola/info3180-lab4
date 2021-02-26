@@ -55,6 +55,8 @@ def get_image(filename):
 @app.route('/upload/files')
 def files():
     filelist = get_uploaded_images()
+    if not session.get('logged_in'):
+        abort(401)
     return render_template("files.html", filelist=filelist)
 def get_uploaded_images():
     path = []
