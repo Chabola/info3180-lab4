@@ -1,4 +1,11 @@
 import os
+from flask import Flask
+
+UPLOAD_FOLDER = './uploads'
+app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+filefolder = app.config['UPLOAD_FOLDER']
+
 
 class Config(object):
     """Base Config Object"""
@@ -13,6 +20,9 @@ class DevelopmentConfig(Config):
     DEVELOPMENT = True
     DEBUG = True
 
+
 class ProductionConfig(Config):
     """Production Config that extends the Base Config Object"""
     DEBUG = False
+
+
