@@ -10,6 +10,7 @@ from flask import render_template, request, redirect, url_for, flash, session, a
 from werkzeug.utils import secure_filename
 from app.forms import UploadForm
 from app.config import filefolder
+from flask import send_from_directory
 
 
 ###
@@ -46,8 +47,23 @@ def upload():
         flash('File Saved', 'success')
         return redirect(url_for('home'))
     return render_template('upload.html', form=form)
-
-
+@app.route('/upload/<filename>')
+def get_image(filename):
+    root_dir = os.getcwd()
+    if filename in get_uploaded_images():
+        return send_from_directory(os.path.join(root_dir, filefolder), filename)
+@app.route('/upload/files')
+def files():
+    filelist = get_uploaded_images()
+    return render_template("files.html", filelist=filelist)
+def get_uploaded_images():
+    path = []
+    upload =os.path.join(filefolder)
+    for root, dirs, files in os.walk(upload):
+        for filename in files:
+            if filename.lower().endswith(('.png', '.jpg', '.jpeg')):
+                path.append(filename)
+    return path
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     error = None
